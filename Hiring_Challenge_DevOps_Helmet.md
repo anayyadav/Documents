@@ -52,7 +52,54 @@ Lets segregate the problem into two parts:
           ```
 
         - Resource constraints
+        K8s orchestrate containers at scale and the heart of the mechanism is the efficient scheduling of pods into nodes. We can do that by specifying resources constraints.
+          1. We can define the resource constraints by setting up request and limit
+          2. Request and limits are enforced based on whether the resource is compressible or incompressible
+          3. K8s divides container into 3 QOS (Quality of Service) classes
+            1. Guaranteed - If limits and optionally requests (not equal to 0) are set for all resources across all containers and they are equal, then the pod is classified as Guaranteed.
+            2. Burstable - If requests and optionally limits are set (not equal to 0) for one or more resources across one or more containers, and they are not equal, then the pod is classified as Burstable. When limits are not specified, they default to the node capacity
+            3. Best effort - If requests and limits are not set for all of the resources, across all containers, then the pod is classified as Best-Effort.
+          4. Guaranteed – Pods will be treated top priority and are guaranteed to not be killed until they exceed their limit
+          5. Burstable -  Pods will have minimal resource guarantee, but can use more resources when available
+          6. Best effort – Pods will be treated as Lowest priority
+        
+          ```console
+            resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 150m
+              memory: 250Mi
+        
+          ```
+
         - Node affinity or Node Selector
+          Not all nodes runs on same hardware and not all service need to run are cpu intensive or memory intensive.
+          Example - When we have a node that are suitable for CPU-intensive operations, we want to pair them with CPU-intensive services to maximize the efforts, to do that we can use nodeSelector, nodeAffinity
+          
+          1. nodeSelector - We can specify the node labels directly
+          2. nodeAffinity - A more expressive yet specific way to schedule the pods on a node
+
+          ```console
+            nodeSelector:
+              infra-node-group: compute-node
+            affinity:
+              nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                - key: capacity-type
+                  operator: In
+                  values:
+                  - spot
+                  - matchExpressions:
+                  - key: capacity-type
+                    operator: In
+                    values:
+                    - on-demand
+          ```
+
         - Graceful shutdown of pods in k8s using lifecycle hooks
     - Fault tolerance, scalability and high availability of the services deployed in K8
         - Auto scaling
