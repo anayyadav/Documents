@@ -119,7 +119,7 @@ Lets segregate the problem into two parts:
           2. Liveness/Readiness probe failure
           3. Resource contention
 
-          ```
+          ```console
             ## for entire pod
             terminationGracePeriodSeconds: 60
             ## for application container 
@@ -131,7 +131,7 @@ Lets segregate the problem into two parts:
                   - '-c'
                   - sleep 60
           ```
-          
+
     - Fault tolerance, scalability and high availability of the services deployed in K8
         - Auto scaling
         - Topology constraint
