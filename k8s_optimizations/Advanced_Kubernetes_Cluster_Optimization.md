@@ -1,6 +1,4 @@
-# Hiring Challenge | DevOps | Helmet
-
-## Advanced Kubernetes Cluster Optimization
+# Advanced Kubernetes Cluster Optimization
 
 Problem: You have access to a hypothetical poorly performing Kubernetes cluster configuration manifest. This cluster is hosting multiple microservices with varying resource demands. Employ your advanced experience to conduct an in-depth analysis of the manifest and propose optimizations for enhanced performance, cost-efficiency, and fault tolerance. Assume the manifest is not directly accessible; provide detailed code snippets to showcase your modifications and optimizations.
 
@@ -327,7 +325,6 @@ Lets segregate the problem into four parts:
 
         1. Keep all the pods in single availablity zone and region if possible
         2. Use vpc endpoint if service is intracting with other AWS services to save Nat Gateway cost
-
 4. Observability
       
     Monitoring a Kubernetes cluster can be challenging due to its intricate architecture and various components. To guarantee optimal performance and seamless application operation, it is essential to track various metrics across different aspects of the cluster
@@ -384,4 +381,3 @@ Lets segregate the problem into four parts:
         5. Too many restarts and CrashLoopBackOff
         6. Pending Pods
         7. Pods in “Unknown” state
-
