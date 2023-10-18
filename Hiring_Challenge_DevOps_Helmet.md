@@ -24,6 +24,7 @@ Lets segregate the problem into two parts:
           3. Use multi stage builds so that we deploy only the compiled application and not the dev sources that comes with it.
 
         - Diagnostic checks
+          
           The K8s probes allows us to validate the state of the pods running in our k8s cluster.  Additionally we can use K8s probe to monitor and gather information about the other events affecting the containers, such as autoscaling.
           1. Start-up probe - This is first to start and tells Kubelet that the application within the container has successfully started. The other probes will be disabled until this probe is in a successful state.
           2. Readiness probe  - This informs K8s that the container is ready to accept the requests. If this probe is in a failed state no traffic is allocated to the pod and the pod is removed from the corresponding service.
