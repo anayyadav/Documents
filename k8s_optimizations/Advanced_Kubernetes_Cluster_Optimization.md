@@ -277,6 +277,7 @@ Lets segregate the problem into four parts:
         ## At pod level
         spec:
           priorityClassName: high-priority
+          
         ```
     - Customise deployment strategy
       
