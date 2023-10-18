@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+{{- if .Values.namespace }}
+  name: {{ .Values.namespace }}
+{{- else }}
+  name: {{ index .Values.labels "infra-env" }}-{{ index .Values.labels "infra-product" }}
+{{- end }}
+spec:
+  finalizers:
+  - kubernetes

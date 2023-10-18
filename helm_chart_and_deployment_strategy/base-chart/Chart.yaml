@@ -1,0 +1,9 @@
+apiVersion: v2
+name: base-chart
+description: Khatabook base helm charts
+type: application
+version: 0.1.0
+home: https://abc.com/
+maintainers:
+- email: anay@abc.com
+  name: Anay Yadav

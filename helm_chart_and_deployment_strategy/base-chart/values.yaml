@@ -1,0 +1,186 @@
+# default values.yaml
+# you can write your own by refering to the examples given under each section.
+serviceName: hello-world
+### example serviceName ###
+#serviceName: test-service
+##############
+
+namespace: test-namespace
+### example namespace ###
+#namespace: dev-0-finserv
+##############
+
+labels:
+  app: hello-world
+  infra-env: dev-0
+  infra-service: hello-world
+### example labels ###
+# labels:
+#   app: test-service
+#   infra-env: dev-0
+#   infra-product: finserv
+#   infra-service: test-service
+##############
+
+vault_secret: {}
+
+### example vault_secret ###
+# vault_secret:
+#   - adminToken
+#   - awsCredentials__accessKeyId
+#   - awsCredentials__secretAccessKey
+##############
+
+
+autoscaling:
+  min: 1
+  max: 1
+  metrics: {}
+  behavior: {}
+
+### example autoscaling ###
+# autoscaling:
+#   min: 2
+#   max: 4
+#   metrics:
+#     - type: Resource
+#       resource:
+#         name: cpu
+#         target:
+#           type: Utilization
+#           averageUtilization: 80
+#     - type: Resource
+#       resource:
+#         name: memory
+#         target:
+#           type: Utilization
+#           averageUtilization: 80
+#   behavior:
+#     scaleUp:
+#       policies:
+#       - periodSeconds: 30
+#         type: Pods
+#         value: 1
+#       - periodSeconds: 30
+#         type: Percent
+#         value: 10
+#       selectPolicy: Max
+#       stabilizationWindowSeconds: 60
+#     scaleDown:
+#       policies:
+#       - periodSeconds: 60
+#         type: Pods
+#         value: 1
+#       selectPolicy: Max
+#       stabilizationWindowSeconds: 300
+
+##############
+image:
+  repository: 741386957827.dkr.ecr.ap-south-1.amazonaws.com/dev-kb-loans-service:20211111124916'
+
+affinity: {}
+podAnnotations: {}
+lifecycle: {}
+resources: {}
+nodeSelector: {}
+tolerations: {}
+env: {}
+
+### example deployment ###
+
+# deployment:
+#   affinity: {}
+#   image:
+#     repository: 741386957827.dkr.ecr.ap-south-1.amazonaws.com/dev-kb-test-service
+#     tag: '20221207083306'
+#   podAnnotations: {}
+#   lifecycle:
+#     preStop:
+#       exec:
+#         command:
+#           - sh
+#           - '-c'
+#           - sleep 30
+#   args: {}
+#   resources:
+#     limits:
+#       cpu: 400m
+#       memory: 1600Mi
+#     requests:
+#       cpu: 200m
+#       memory: 800Mi
+#   nodeSelector:
+#     infra-node-group: node-group-compute-spot
+#   tolerations:
+#     - key: ComputePurposeSpotInstance
+#       operator: Equal
+#       value: 'true'
+#       effect: PreferNoSchedule
+#   env:
+#     - name: DEPLOYMENT_ENV
+#       value: dev-0
+#     - name: DEBUG
+#       value: knex:query,knex:bindings
+##############
+
+
+health_check:
+  path: "/health"
+  port: 8080
+
+### Default health_check ###
+# health_check:
+#   path: "/"
+#   port: 8080
+##############
+
+
+ingress: {}
+
+### example ingress ###
+# ingress:
+#   - name: test-service-private
+#     annotations:
+#       kubernetes.io/ingress.class: kong-abc-private
+#     rules:
+#       - host: test-service.dev-0.abc.com
+#         http:
+#           paths:
+#             - path: /test-service
+#               pathType: Prefix
+#               backend:
+#                 service:
+#                   name: test-service
+#                   port:
+#                     number: 80
+#   - name: test-service-public
+#     annotations:
+#       kubernetes.io/ingress.class: kong-abc-private
+#       konghq.com/https-redirect-status-code: '301'
+#       konghq.com/protocols: https
+#     rules:
+#       - host: api.dev-0.abc.com
+#         http:
+#           paths:
+#             - path: /test-service
+#               pathType: Prefix
+#               backend:
+#                 service:
+#                   name: test-service
+#                   port:
+#                     number: 80
+
+##############
+
+
+iam_role: {}
+
+### example iam_role ###
+#iam_role: arn:aws:iam::741386957827:role/test-service
+
+
+priorityClass: high-priority
+##############
+
+### do not include this
+test: "{{"

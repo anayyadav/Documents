@@ -1,0 +1,13 @@
+apiVersion: v2
+name: Frontend-Service
+description: frontend service helm chart
+type: application
+version: 0.1.0
+maintainers:
+- email: anay@abc.com
+  name: Anay Yadav
+
+dependencies:
+  - name: base-chart
+    repository: s3://infra-helm-chart
+    version: 0.1.0

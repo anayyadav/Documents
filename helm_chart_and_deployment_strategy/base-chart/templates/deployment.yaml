@@ -1,0 +1,122 @@
+{{- $dumy := .Values.test -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "base-chart.fullname" . }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- toYaml .Values.labels | nindent 4 }}
+spec:
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- toYaml .Values.labels | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+    {{- if .Values.vault_secret }}
+        vault.hashicorp.com/agent-cache-enable: 'true'
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-pre-populate-only: 'true'
+        vault.hashicorp.com/agent-inject-secret-secrets.txt: private/data/{{ .Values.namespace }}/{{ include "base-chart.fullname" . }}
+        vault.hashicorp.com/role: {{ .Values.namespace }}-{{ include "base-chart.fullname" . }}
+        vault.hashicorp.com/agent-inject-template-secrets.txt: |
+          {{ $dumy }}- with secret "private/data/{{ .Values.namespace }}/{{ include "base-chart.fullname" . }}" }}
+          {{- range $index, $topping := .Values.vault_secret }}
+          "{{ $topping }}"="{{ $dumy }} .Data.data.{{ $topping }} }}"
+          {{- end }}
+          {{ $dumy }}- end }}
+    {{- end }}
+      labels:
+        {{- toYaml .Values.labels | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "base-chart.fullname" . }}
+      serviceAccount: {{ include "base-chart.fullname" . }}
+      terminationGracePeriodSeconds: 60
+      containers:
+        - name: {{ include "base-chart.fullname" . }}
+          image: "{{ $.Values.image.repository }}"
+          imagePullPolicy: Always
+          ports:
+            - protocol: TCP
+            {{- if .Values.health_check.port }}
+              containerPort: {{ int .Values.health_check.port }}
+            {{- else }}
+              containerPort: 3000
+            {{- end }}
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: "{{ .Values.health_check.path }}"
+            {{- if .Values.health_check.port }}
+              port: {{ int .Values.health_check.port }}
+            {{- else }}
+              port: 8080
+            {{- end }}
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+            {{- if .Values.health_check.path }}
+              path: "{{ .Values.health_check.path }}"
+            {{- else }}
+              path: "/"
+            {{- end }}
+            {{- if .Values.health_check.port }}
+              port: {{ int .Values.health_check.port }}
+            {{- else }}
+              port: 8080
+            {{- end }}
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 1
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+          {{- toYaml .Values.lifecycle | nindent 12 }}
+          env:
+            - name: DEPLOYMENT_ENV
+              value: {{ index .Values.labels "infra-env" }}
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.nodeSelector  }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              {{- toYaml .Values.labels | nindent 14 }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      restartPolicy: Always
+      dnsPolicy: ClusterFirst
+    {{- if .Values.priorityClass }}
+      priorityClassName: {{ .Values.priorityClass }}
+    {{- else }}
+      priorityClassName: default-pod-priority
+    {{- end }}
+      securityContext: {}
