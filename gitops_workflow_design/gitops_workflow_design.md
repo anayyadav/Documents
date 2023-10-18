@@ -8,6 +8,7 @@ Deliverables:
 ## Solution
 
 1. GitOps Workflow in detail
+
     GitOps is a modern way to make better IaC for delivering apps/services in K8s. It is all about dterminism, idempotence, automation, observability and many other features.
 
     * How GitOps works
@@ -29,4 +30,105 @@ Deliverables:
         ![CICD With GitOps](image.png)
 
         As you can see in the above diagram, the GitOps operator lives within the clsuter and is using pull based deployment machanism.
+    
+    * Pros of GitOps approach
 
+        - Automation
+
+            With GitOps we make neither manual changes in K8s, nor manual actions to sync the state from Git. The GitOps operator is responsible for keeping everything in sync and it does it automatically.
+        - Convergence
+
+            Our system tends to come to the desired state and even if it becomes, occasionally out of sync the GitOps operator will bring it back on its own.
+        - Rollbacks and rollout
+
+            GitOps operator like ArgoCD has nice UI where in Developer/QA guys can see the status of rollout and rollback.
+        
+        - State visibility
+            We can easliy see following state
+            1. Last sync 
+            2. Health Status
+            3. Current Status
+            4. Real time updates
+        
+2. Implementation
+
+    * prerequisite
+        - Must have ArgoCD install as we are using ArgoCD as GitOps operator in our usecase
+        - We must have K8s manifest or Helm charts of the services in a repository
+        - We must have a seprate repository called state-repository in which we will have our values.yaml or K8s manifest files in an organised manner
+
+    Here we will take the example of the earlier problem statement where in we have a backend service which we will be deploying using ArgoCD a GitOps Operator
+
+    Please check the helm Chart here - 
+
+
+    1. Create a project in ArgoCD
+        Here we are creating a logical grouping of our appicaiton with access restrications.
+
+        We are allowing all the git repos to be used by this project, all the namespace as a destination that the project can deploy to. 
+
+        We can also create project role with set of permisions called policies to grant specfic acces to project applications. 
+
+        ```console
+        apiVersion: argoproj.io/v1alpha1
+        kind: AppProject
+        metadata: 
+            name: Project-A
+            namespace: argocd
+        spec:
+            description: Argo CD poc
+            sourceRepos:
+                - "*"
+            destination:
+                - server: "*"
+                namespace: "*"
+            clusterResourceWhitelist: 
+                - group: "*"
+                kind: "*"
+            namespaceResourceWhitelist: 
+                - group: "*"
+                kind: "*"
+
+        ``` 
+
+    2. Registor our private helm repos in ArgoCD
+        ```console
+        apiVersion: v1
+        kind: secret
+        metadata:
+            name: private-repo
+            namespace: argocd
+        labels:
+            argocd:argoproj.io/secret-type: repository
+        stringData:
+            type: helm 
+            url: git@github.com:anayyadav/Documents.git
+            sshPrivateKey: | <ssh key>
+        ```
+    
+    3. Create the application with a helm as source and K8s as detination
+        ```console
+        apiVersion: argoproj.io/v1alpha1
+        kind: Application
+        metadata:
+            name: Backend-servcie
+            namespace: argocd
+
+        spec:
+            destination: 
+            project: Project-A
+            source:
+                chart: backend-service
+                repoUrl: git@github.com:anayyadav/Documents.git/
+                targetRevision: 
+            helm: 
+                releaseName: Backend-service
+            detination:
+                server: "https://kubernetes.default.svc"
+                namespace: demo
+            syncPolicy:
+                syncOptions:
+                    - createNamespace: true
+
+       ```
+    4. Once these are configured, we can login to argocd and click on sync now. And our servic will be deployed and we can also see the rollout status.
