@@ -18,5 +18,15 @@ Lets segregate the problem into two parts:
     - Cost optimisation
 2.	Optimisation of the service deployed in K8s cluster
     - Performance enhancement
+        - Build optimised docker image
+        - Diagnostic checks
+        - Resource constraints
+        - Node affinity or Node Selector
+        - Graceful shutdown of pods in k8s using lifecycle hooks
     - Fault tolerance, scalability and high availability of the services deployed in K8
+        - Auto scaling
+        - Topology constraint
+        - Pod Anti-affinity
+        - Pod Disruption Budget
+        - Pod priority and Pre-emption
     - Cost optimisation at service deployment level
