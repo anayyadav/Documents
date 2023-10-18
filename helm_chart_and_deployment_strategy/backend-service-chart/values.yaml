@@ -1,0 +1,93 @@
+base-chart:
+  serviceName: backend-service
+  namespace: demo
+
+  labels:
+    app: backend-service
+    infra-env: prod
+    infra-service: backend-service
+
+  ### example autoscaling ###
+  autoscaling:
+    min: 2
+    max: 4
+    metrics:
+      - type: Resource
+        resource:
+          name: cpu
+          target:
+            type: Utilization
+            averageUtilization: 80
+      - type: Resource
+        resource:
+          name: memory
+          target:
+            type: Utilization
+            averageUtilization: 80
+    behavior:
+      scaleUp:
+        policies:
+        - periodSeconds: 30
+          type: Pods
+          value: 1
+        - periodSeconds: 30
+          type: Percent
+          value: 10
+        selectPolicy: Max
+        stabilizationWindowSeconds: 60
+      scaleDown:
+        policies:
+        - periodSeconds: 60
+          type: Pods
+          value: 1
+        selectPolicy: Max
+        stabilizationWindowSeconds: 300
+
+  ##############
+  image:
+    repository: 741386957827.dkr.ecr.ap-south-1.amazonaws.com/backend-service:20211111124916'
+
+  affinity: {}
+
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - sh
+          - '-c'
+          - sleep 30
+  resources:
+    limits:
+      cpu: 400m
+      memory: 1600Mi
+    requests:
+      cpu: 200m
+      memory: 800Mi
+  nodeSelector:
+    infra-node-group: compute-arm-spot
+  env:
+    - name: DEPLOYMENT_ENV
+      value: prod
+  ##############
+
+  ingress:
+    - name: backend-service-public
+      annotations:
+        kubernetes.io/ingress.class: kong-abc-public
+      rules:
+        - host: backend-service.abc.com
+          http:
+            paths:
+              - path: /
+                pathType: Prefix
+                backend:
+                  service:
+                    name: backend-service
+                    port:
+                      number: 80
+
+  ##############
+
+
+  iam_role: arn:aws:iam::741386957827:role/backend-service
+  priorityClass: high-priority
