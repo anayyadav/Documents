@@ -105,7 +105,7 @@ Lets segregate the problem into two parts:
           ```
 
         - Graceful shutdown of pods in k8s using lifecycle hooks
-        
+
           Pod are ephemeral in nature and may be killed due to a number of different reasons such as: 
           1. Being scheduled on a node that fails (In this case the pod will be deleted )
           2. Lack of resources on the node where the pods is scheduled (In this case the pod will be evicted )
@@ -119,6 +119,19 @@ Lets segregate the problem into two parts:
           2. Liveness/Readiness probe failure
           3. Resource contention
 
+          ```
+            ## for entire pod
+            terminationGracePeriodSeconds: 60
+            ## for application container 
+            lifecycle:
+              preStop:
+              exec:
+                command:
+                  - sh
+                  - '-c'
+                  - sleep 60
+          ```
+          
     - Fault tolerance, scalability and high availability of the services deployed in K8
         - Auto scaling
         - Topology constraint
