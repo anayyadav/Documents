@@ -34,10 +34,13 @@ Lets segregate the problem into two parts:
         - 
       2. Control Plane Level
         - Latency in Creating Pods
+        
             If it takes time for Pods to be created and start running we may an have issue with Kubelet or even the API server.
         - kubelet State
+
             When Kubelet is experiencing issues, you may notice Pods are not being scheduled on nodes, it takes time for Pods to be created and Pods are not starting as quickly as you are used to. This is exactly why it’s so crucial to monitor Kubelet.
         - kube-controller-manager State
+
             kube-controller-manager is a collection of controllers responsible for reconciling tasks to make sure the actual state meets the desired state, in objects like ReplicaSets, Deployments, PersistentVolumes, etc. So we need to monitor it and making sure it’s up.
 
 
