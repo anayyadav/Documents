@@ -13,9 +13,37 @@ Deliverables:
 
 Lets segregate the problem into two parts:
 1.	**K8s cluster optimisation**
-    - Performance enhancement    
+    - Performance enhancement
     - Fault tolerance and scalability of the cluster
     - Cost optimisation
+    - Observability
+    
+      Monitoring a Kubernetes cluster can be challenging due to its intricate architecture and various components. To guarantee optimal performance and seamless application operation, it is essential to track various metrics across different aspects of the cluster
+
+      1. Node Level
+        - Node Memory Pressure
+            By setting an alert when a node exceeds a certain percentage of memory consumption, such as 90%, we can proactively address potential issues before experiencing disruptions to your application or service.
+
+        - Node CPU High Utilization
+            It appears some Pods are sensitive to CPU throttling and may experience some readiness probes failure leading to Pod restarts and eventually non-operational application or service. Hence it is importan to monitor CPU utilization of nodes
+
+        - Node not in Ready state
+
+        - Node Disk Pressure - 
+        - Network In and Out - 
+        - 
+      2. Control Plane Level
+        - Latency in Creating Pods
+            If it takes time for Pods to be created and start running we may an have issue with Kubelet or even the API server.
+        - kubelet State
+            When Kubelet is experiencing issues, you may notice Pods are not being scheduled on nodes, it takes time for Pods to be created and Pods are not starting as quickly as you are used to. This is exactly why it’s so crucial to monitor Kubelet.
+        - kube-controller-manager State
+            kube-controller-manager is a collection of controllers responsible for reconciling tasks to make sure the actual state meets the desired state, in objects like ReplicaSets, Deployments, PersistentVolumes, etc. So we need to monitor it and making sure it’s up.
+
+
+
+
+    
 2.	**Optimisation of the service deployed in K8s cluster**
     - Performance enhancement
         - Build optimised docker image
@@ -132,7 +160,6 @@ Lets segregate the problem into two parts:
                 - '-c'
                 - sleep 60
           ```
-
     - Fault tolerance, scalability and high availability of the services deployed in K8
         - Auto scaling
 
@@ -309,7 +336,6 @@ Lets segregate the problem into two parts:
         - Compute and storage cost
 
           1. Right sizeing of the pods
-
             - Overcommit CPU, memory, storage to achieve high utilization, reduce waste.
             - Manage headroom for spikes using auto-scaling and admission control.
             - Scale out with more small nodes vs vertical scaling up
@@ -327,7 +353,6 @@ Lets segregate the problem into two parts:
 
 
           2. Architecting for Right Size Agility
-
             - Decompose monoliths into independently scalable microservices
             - Stateless services for maximum horizontal scale
             - Isolate databases, caches, message queues for independent scaling
@@ -335,8 +360,27 @@ Lets segregate the problem into two parts:
             - Process queue backlog with extra capacity during lulls
 
         - Data transfer cost
-        
+
           1. Keep all the pods in single availablity zone and region if possible
           2. Use vpc endpoint if service is intracting with other AWS services to save Nat Gateway cost
+    - Observability
+      
+      Monitoring a Kubernetes cluster can be challenging due to its intricate architecture and various components. To guarantee optimal performance and seamless application operation, it is essential to track various metrics across different aspects of the cluster
 
+      1. Deployment Level
+
+        - Desired Number of Replicas vs. Running number of Replicas
+            To track the mismatch between the two that usually means there is some issue preventing all the replicas from running.
+
+        - Pod creation and deletion rate
+            To track how quickly a Deployment is scaling and identify issues with the scaling, you may want to look into monitoring the metrics for Pods creation and deletion rates.
+
+      2. Pod level
+        - OOMkilled Pods - Ensuring fair resource allocation among Pods and to prevent out-of-memory issues
+        - Pods with CPU Throttling
+        - Readiness Probe Failures
+        - Pods Running on the Right Node
+        - Too many restarts and CrashLoopBackOff
+        - Pending Pods
+        - Pods in “Unknown” state
 
