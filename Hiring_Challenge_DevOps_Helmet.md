@@ -264,4 +264,29 @@ Lets segregate the problem into two parts:
           ```
 
         - Pod priority and Pre-emption
+
+        - Customise deployment strategy
+
+          A k8s deployment strategy is a declarative statement that defines the application lifecycle and how updates to an application should be applied.
+          There are many deployment strategy out there but here we will only discuss about the deployment strategy supports in k8s out of the box.
+
+          1. Rolling deployment  (best suited)
+
+            It replaces the existing version of the pods with a new version, updating pods slowly one by one, without downtime
+            It uses readiness probe to check if a new pod is ready, before starting to scale down pods with older version
+            To refine our deployment strategy, change the following parameters
+
+            - MaxSurge – max number of pods the deployment is allowed to create at one time
+            - MaxUnavailable – specifies the max number of pods that are allowed to be unavailable during the rollout
+          2. Recreate deployment
+          
+            This is a basic deployment pattern which simply shuts down all the old pods and replace them with new ones. 
+
+          ```console
+          strategy:
+          type: RollingUpdate
+          rollingUpdate:
+              maxUnavailable: 0
+              maxSurge: 1
+          ```
     - Cost optimisation at service deployment level
