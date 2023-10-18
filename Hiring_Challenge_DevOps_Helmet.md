@@ -307,7 +307,9 @@ Lets segregate the problem into two parts:
           ```
     - Cost optimisation at service deployment level
         - Compute and storage cost
+
           1. Right sizeing of the pods
+
             - Overcommit CPU, memory, storage to achieve high utilization, reduce waste.
             - Manage headroom for spikes using auto-scaling and admission control.
             - Scale out with more small nodes vs vertical scaling up
@@ -323,14 +325,18 @@ Lets segregate the problem into two parts:
             - Use arm nodes which are cheaper as compare to amd
             - Use spot nodes instead of ondeamand nodes and use fallback option to make sevice fault tolrent. 
 
+
           2. Architecting for Right Size Agility
+
             - Decompose monoliths into independently scalable microservices
             - Stateless services for maximum horizontal scale
             - Isolate databases, caches, message queues for independent scaling
             - Queue requests to handle spikes without overloaded resources
             - Process queue backlog with extra capacity during lulls
+
         - Data transfer cost
+        
           1. Keep all the pods in single availablity zone and region if possible
           2. Use vpc endpoint if service is intracting with other AWS services to save Nat Gateway cost
-          
+
 
