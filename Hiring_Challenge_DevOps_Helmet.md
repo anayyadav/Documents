@@ -264,6 +264,22 @@ Lets segregate the problem into two parts:
           ```
 
         - Pod priority and Pre-emption
+          1. Pod priority indicates the importance of a pod relative to other pods and queues the pods based on that priority.
+          2. We can assign pods a priority class, which is a non-namespaced object that defines a mapping from a name to the integer value of the priority. The higher the value, the higher the priority.
+          3. Pod pre-emption allows the cluster to evict or pre-empt, lower-priority pods so that higher priority pods can be scheduled it there is no available space on a suitable node
+          4. Pod Priority also affects the scheduling order of the pods and out of resource eviction ordering on the node
+
+          ```console
+          ## At global level
+          apiVersion: scheduling.k8s.io/v1
+          description: Used for highly critical service pods that must run in the cluster, but can be moved to another node if necessary.
+          kind: PriorityClass
+          metadata:
+            name: high-priority
+          preemptionPolicy: PreemptLowerPriority
+          value: 100000
+            ```
+
 
         - Customise deployment strategy
 
