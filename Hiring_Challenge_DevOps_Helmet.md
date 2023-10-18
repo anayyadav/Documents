@@ -13,10 +13,10 @@ Deliverables:
 
 Lets segregate the problem into two parts:
 1.	K8s cluster optimisation
-    1.1. Performance enhancement
-    1.2. Fault tolerance and scalability of the cluster
-    1.3. Cost optimisation
+    - Performance enhancement    
+    - Fault tolerance and scalability of the cluster
+    - Cost optimisation
 2.	Optimisation of the service deployed in K8s cluster
-    2.1. Performance enhancement
-    2.2. Fault tolerance, scalability and high availability of the services deployed in K8
-    2.3. Cost optimisation at service deployment level
+    - Performance enhancement
+    - Fault tolerance, scalability and high availability of the services deployed in K8
+    - Cost optimisation at service deployment level
