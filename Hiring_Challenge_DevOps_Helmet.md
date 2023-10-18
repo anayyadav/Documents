@@ -24,7 +24,7 @@ Lets segregate the problem into two parts:
           3. Use multi stage builds so that we deploy only the compiled application and not the dev sources that comes with it.
 
         - Diagnostic checks
-        The K8s probes allows us to validate the state of the pods running in our k8s cluster.  Additionally we can use K8s probe to monitor and gather information about the other events affecting the containers, such as autoscaling.
+          The K8s probes allows us to validate the state of the pods running in our k8s cluster.  Additionally we can use K8s probe to monitor and gather information about the other events affecting the containers, such as autoscaling.
           1. Start-up probe - This is first to start and tells Kubelet that the application within the container has successfully started. The other probes will be disabled until this probe is in a successful state.
           2. Readiness probe  - This informs K8s that the container is ready to accept the requests. If this probe is in a failed state no traffic is allocated to the pod and the pod is removed from the corresponding service.
           3. Liveness probe – It confirms whether the container is running. If the signal form the probe indicates a non running status, the kubelet picks up this signal and kills the container process. 
@@ -52,7 +52,7 @@ Lets segregate the problem into two parts:
           ```
 
         - Resource constraints
-        K8s orchestrate containers at scale and the heart of the mechanism is the efficient scheduling of pods into nodes. We can do that by specifying resources constraints.
+          K8s orchestrate containers at scale and the heart of the mechanism is the efficient scheduling of pods into nodes. We can do that by specifying resources constraints.
           1. We can define the resource constraints by setting up request and limit
           2. Request and limits are enforced based on whether the resource is compressible or incompressible
           3. K8s divides container into 3 QOS (Quality of Service) classes
@@ -75,9 +75,9 @@ Lets segregate the problem into two parts:
           ```
 
         - Node affinity or Node Selector
-        Not all nodes runs on same hardware and not all service need to run are cpu intensive or memory intensive.
+          Not all nodes runs on same hardware and not all service need to run are cpu intensive or memory intensive.
         
-        Example - When we have a node that are suitable for CPU-intensive operations, we want to pair them with CPU-intensive services to maximize the efforts, to do that we can use nodeSelector, nodeAffinity
+          Example - When we have a node that are suitable for CPU-intensive operations, we want to pair them with CPU-intensive services to maximize the efforts, to do that we can use nodeSelector, nodeAffinity
           
           1. nodeSelector - We can specify the node labels directly
           2. nodeAffinity - A more expressive yet specific way to schedule the pods on a node
@@ -102,18 +102,18 @@ Lets segregate the problem into two parts:
           ```
 
         - Graceful shutdown of pods in k8s using lifecycle hooks
-        Pod are ephemeral in nature and may be killed due to a number of different reasons such as: 
-        1. Being scheduled on a node that fails (In this case the pod will be deleted )
-        2. Lack of resources on the node where the pods is scheduled (In this case the pod will be evicted )
+          Pod are ephemeral in nature and may be killed due to a number of different reasons such as: 
+          1. Being scheduled on a node that fails (In this case the pod will be deleted )
+          2. Lack of resources on the node where the pods is scheduled (In this case the pod will be evicted )
 
-        Since pods fundamentally represent process running on nodes in a cluster, it is important to ensure that when killed, they have time to clean up and terminate gracefully. 
+          Since pods fundamentally represent process running on nodes in a cluster, it is important to ensure that when killed, they have time to clean up and terminate gracefully. 
         
-        By default K8s will wait for 30 sec to allow processes to handle the TERM signal. This is known as grace period. If the grace period time runs out and the process has not gracefully exited, the container runtime will send a KILL signal, abruptly stopping the process. This is useful when a processes needs additional time to clean up (making network call, write to disk etc.)
+          By default K8s will wait for 30 sec to allow processes to handle the TERM signal. This is known as grace period. If the grace period time runs out and the process has not gracefully exited, the container runtime will send a KILL signal, abruptly stopping the process. This is useful when a processes needs additional time to clean up (making network call, write to disk etc.)
         
-        K8s allows us to define lifecycle hooks for containers, important in the context of graceful shutdown is the preStop hook, that will be called when a container is terminated due to: 
-        1. An API request
-        2. Liveness/Readiness probe failure
-        3. Resource contention
+          K8s allows us to define lifecycle hooks for containers, important in the context of graceful shutdown is the preStop hook, that will be called when a container is terminated due to: 
+          1. An API request
+          2. Liveness/Readiness probe failure
+          3. Resource contention
 
     - Fault tolerance, scalability and high availability of the services deployed in K8
         - Auto scaling
