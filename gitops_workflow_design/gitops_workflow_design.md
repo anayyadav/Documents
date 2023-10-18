@@ -59,7 +59,7 @@ Deliverables:
 
     Here we will take the example of the earlier problem statement where in we have a backend service which we will be deploying using ArgoCD a GitOps Operator
 
-    Please check the helm Chart here - 
+    Please check the helm Chart here - https://github.com/anayyadav/Documents/tree/main/helm_chart_and_deployment_strategy
 
 
     1. Create a project in ArgoCD
