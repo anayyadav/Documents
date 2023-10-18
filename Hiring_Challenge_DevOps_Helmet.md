@@ -22,9 +22,11 @@ Lets segregate the problem into two parts:
 
       1. Node Level
         - Node Memory Pressure
+
             By setting an alert when a node exceeds a certain percentage of memory consumption, such as 90%, we can proactively address potential issues before experiencing disruptions to your application or service.
 
         - Node CPU High Utilization
+
             It appears some Pods are sensitive to CPU throttling and may experience some readiness probes failure leading to Pod restarts and eventually non-operational application or service. Hence it is importan to monitor CPU utilization of nodes
 
         - Node not in Ready state
@@ -34,7 +36,7 @@ Lets segregate the problem into two parts:
         - 
       2. Control Plane Level
         - Latency in Creating Pods
-        
+
             If it takes time for Pods to be created and start running we may an have issue with Kubelet or even the API server.
         - kubelet State
 
@@ -373,9 +375,11 @@ Lets segregate the problem into two parts:
       1. Deployment Level
 
         - Desired Number of Replicas vs. Running number of Replicas
+
             To track the mismatch between the two that usually means there is some issue preventing all the replicas from running.
 
         - Pod creation and deletion rate
+        
             To track how quickly a Deployment is scaling and identify issues with the scaling, you may want to look into monitoring the metrics for Pods creation and deletion rates.
 
       2. Pod level
