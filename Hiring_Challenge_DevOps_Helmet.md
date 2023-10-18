@@ -31,9 +31,17 @@ Lets segregate the problem into two parts:
 
         - Node not in Ready state
 
-        - Node Disk Pressure - 
-        - Network In and Out - 
-        - 
+            It is normal for a node to be in a non-Ready state for brief periods of time as it can be due to node draining, upgrade, and other completely normal scenarios. Above a certain period of time, however, it can indicate there is some issue with the node. For example, an “Unknown” state means the controller couldn’t communicate with the node to identify its state and it’s definitely something worth following and knowing about to ensure the cluster is running smoothly.
+
+
+        - Node Disk Pressure
+
+            Running out of disk space can cause issues with the node’s overall health, even if most storage is defined and used outside of the nodes. It is important to be proactive and monitor disk space to ensure that there is enough free space and avoid potential issues.
+
+        - Network In and Out
+
+            Monitoring the network traffic in and out of our Kubernetes nodes is crucial for identifying potential issues. By tracking network metrics, we can quickly detect and respond to alerts indicating a lack of traffic to and from a node, which may indicate a serious problem with the node. This will help us to ensure the smooth operation of your Kubernetes cluster.
+ 
       2. Control Plane Level
         - Latency in Creating Pods
 
@@ -379,7 +387,7 @@ Lets segregate the problem into two parts:
             To track the mismatch between the two that usually means there is some issue preventing all the replicas from running.
 
         - Pod creation and deletion rate
-        
+
             To track how quickly a Deployment is scaling and identify issues with the scaling, you may want to look into monitoring the metrics for Pods creation and deletion rates.
 
       2. Pod level
