@@ -335,53 +335,53 @@ Lets segregate the problem into four parts:
     - Node Level
 
       1. Node Memory Pressure
-
-        By setting an alert when a node exceeds a certain percentage of memory consumption, such as 90%, we can proactively address potential issues before experiencing disruptions to your application or service.
+        
+            By setting an alert when a node exceeds a certain percentage of memory consumption, such as 90%, we can proactively address potential issues before experiencing disruptions to your application or service.
 
       2. Node CPU High Utilization
-
-        It appears some Pods are sensitive to CPU throttling and may experience some readiness probes failure leading to Pod restarts and eventually non-operational application or service. Hence it is importan to monitor CPU utilization of nodes
+        
+            It appears some Pods are sensitive to CPU throttling and may experience some readiness probes failure leading to Pod restarts and eventually non-operational application or service. Hence it is importan to monitor CPU utilization of nodes
 
       3.  Node not in Ready state
-
-        It is normal for a node to be in a non-Ready state for brief periods of time as it can be due to node draining, upgrade, and other completely normal scenarios. Above a certain period of time, however, it can indicate there is some issue with the node. For example, an “Unknown” state means the controller couldn’t communicate with the node to identify its state and it’s definitely something worth following and knowing about to ensure the cluster is running smoothly.
+        
+            It is normal for a node to be in a non-Ready state for brief periods of time as it can be due to node draining, upgrade, and other completely normal scenarios. Above a certain period of time, however, it can indicate there is some issue with the node. For example, an “Unknown” state means the controller couldn’t communicate with the node to identify its state and it’s definitely something worth following and knowing about to ensure the cluster is running smoothly.
 
 
       4. Node Disk Pressure
-
-        Running out of disk space can cause issues with the node’s overall health, even if most storage is defined and used outside of the nodes. It is important to be proactive and monitor disk space to ensure that there is enough free space and avoid potential issues.
+        
+            Running out of disk space can cause issues with the node’s overall health, even if most storage is defined and used outside of the nodes. It is important to be proactive and monitor disk space to ensure that there is enough free space and avoid potential issues.
 
       5. Network In and Out
-
-        Monitoring the network traffic in and out of our Kubernetes nodes is crucial for identifying potential issues. By tracking network metrics, we can quickly detect and respond to alerts indicating a lack of traffic to and from a node, which may indicate a serious problem with the node. This will help us to ensure the smooth operation of your Kubernetes cluster.
+        
+            Monitoring the network traffic in and out of our Kubernetes nodes is crucial for identifying potential issues. By tracking network metrics, we can quickly detect and respond to alerts indicating a lack of traffic to and from a node, which may indicate a serious problem with the node. This will help us to ensure the smooth operation of your Kubernetes cluster.
 
     - Control Plane Level
 
       1. Latency in Creating Pods
-
-        If it takes time for Pods to be created and start running we may an have issue with Kubelet or even the API server.
+        
+            If it takes time for Pods to be created and start running we may an have issue with Kubelet or even the API server.
       2. kubelet State
-
-        When Kubelet is experiencing issues, you may notice Pods are not being scheduled on nodes, it takes time for Pods to be created and Pods are not starting as quickly as you are used to. This is exactly why it’s so crucial to monitor Kubelet.
+    
+            When Kubelet is experiencing issues, you may notice Pods are not being scheduled on nodes, it takes time for Pods to be created and Pods are not starting as quickly as you are used to. This is exactly why it’s so crucial to monitor Kubelet.
       3. kube-controller-manager State
 
-        kube-controller-manager is a collection of controllers responsible for reconciling tasks to make sure the actual state meets the desired state, in objects like ReplicaSets, Deployments, PersistentVolumes, etc. So we need to monitor it and making sure it’s up.
+            kube-controller-manager is a collection of controllers responsible for reconciling tasks to make sure the actual state meets the desired state, in objects like ReplicaSets, Deployments, PersistentVolumes, etc. So we need to monitor it and making sure it’s up.
 
     - Deployment Level
-      1. Desired Number of Replicas vs. Running number of Replicas
+        1. Desired Number of Replicas vs. Running number of Replicas
+            
+            To track the mismatch between the two that usually means there is some issue preventing all the replicas from running.
 
-        To track the mismatch between the two that usually means there is some issue preventing all the replicas from running.
-
-      2. Pod creation and deletion rate
-
-        To track how quickly a Deployment is scaling and identify issues with the scaling, you may want to look into monitoring the metrics for Pods creation and deletion rates.
+        2. Pod creation and deletion rate
+            
+            To track how quickly a Deployment is scaling and identify issues with the scaling, you may want to look into monitoring the metrics for Pods creation and deletion rates.
 
     - Pod level
-      1. OOMkilled Pods - Ensuring fair resource allocation among Pods and to prevent out-of-memory issues
-      2. Pods with CPU Throttling
-      3. Readiness Probe Failures
-      4. Pods Running on the Right Node
-      5. Too many restarts and CrashLoopBackOff
-      6. Pending Pods
-      7. Pods in “Unknown” state
+        1. OOMkilled Pods - Ensuring fair resource allocation among Pods and to prevent out-of-memory issues
+        2. Pods with CPU Throttling
+        3. Readiness Probe Failures
+        4. Pods Running on the Right Node
+        5. Too many restarts and CrashLoopBackOff
+        6. Pending Pods
+        7. Pods in “Unknown” state
 
