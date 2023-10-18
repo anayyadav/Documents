@@ -140,16 +140,16 @@ Lets segregate the problem into four parts:
         apiVersion: autoscaling/v2
         kind: HorizontalPodAutoscaler
         metadata:
-        name: service-A
-        namespace: namespace-A
+        name: test-service
+        namespace: test-namespace
         labels:
             infra-env: prod
             infra-product: payments
-            infra-service: service-A
+            infra-service: test-service
         spec:
         scaleTargetRef:
             kind: Deployment
-            name: service-A
+            name: test-service
             apiVersion: apps/v1
         minReplicas: 2
         maxReplicas: 75
@@ -200,7 +200,7 @@ Lets segregate the problem into four parts:
             labelSelector:
                 matchLabels:
                 infra-env: prod
-                infra-service: service-A
+                infra-service: test-service
         ```
 
     - Pod Anti-affinity
@@ -231,9 +231,9 @@ Lets segregate the problem into four parts:
                 requiredDuringSchedulingIgnoredDuringExecution:
                 - labelSelector:
                     matchLabels:
-                    app: service-A
+                    app: test-service
                     infra-env: prod
-                    infra-service: service-A
+                    infra-service: test-service
                 topologyKey: kubernetes.io/hostname          
         ```
     - Pod Disruption Budget
@@ -246,13 +246,13 @@ Lets segregate the problem into four parts:
         apiVersion: policy/v1
         kind: PodDisruptionBudget
         metadata:
-            name: service-A
-            namespace: namespace-A
+            name: test-service
+            namespace: test-namespace
         spec:
             maxUnavailable: 1
             selector:
                 matchLabels:
-                app: service-A
+                app: test-service
 
         ```
 
@@ -271,6 +271,12 @@ Lets segregate the problem into four parts:
         name: high-priority
         preemptionPolicy: PreemptLowerPriority
         value: 100000
+        ```
+
+        ```console
+        ## At pod level
+        spec:
+          priorityClassName: high-priority
         ```
     - Customise deployment strategy
       

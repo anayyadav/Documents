@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    konghq.com/https-redirect-status-code: "301"
+    konghq.com/protocols: https
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+  labels:
+    app: test-service
+    infra-env: prod
+    infra-service: test-service
+  name: test-service-public
+  namespace: test-namespace
+spec:
+  ingressClassName: kong-abc-public
+  rules:
+  - host: test.abc.com
+    http:
+      paths:
+      - backend:
+          service:
+            name: test-service
+            port:
+              number: 80
+        path: /test-service
+        pathType: Prefix

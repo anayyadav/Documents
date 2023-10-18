@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::694468745478:role/test-service
+  labels:
+    infra-env: prod
+    infra-product: khatabook
+    infra-service: test-service
+  name: test-service
+  namespace: test-namespace

@@ -1,0 +1,12 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: test-service
+  namespace: prod-khatabook
+spec:
+  maxUnavailable: 1%
+  selector:
+    matchLabels:
+      app: test-service
+      infra-env: prod
+      infra-service: test-service
