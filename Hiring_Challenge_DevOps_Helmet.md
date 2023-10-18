@@ -12,11 +12,11 @@ Deliverables:
 ### Solution
 
 Lets segregate the problem into two parts:
-1.	K8s cluster optimisation
+1.	** K8s cluster optimisation **
     - Performance enhancement    
     - Fault tolerance and scalability of the cluster
     - Cost optimisation
-2.	Optimisation of the service deployed in K8s cluster
+2.	** Optimisation of the service deployed in K8s cluster **
     - Performance enhancement
         - Build optimised docker image
           1. Have small images, since big images are not so portable over the network
