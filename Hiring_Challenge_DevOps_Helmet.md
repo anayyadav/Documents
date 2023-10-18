@@ -75,8 +75,9 @@ Lets segregate the problem into two parts:
           ```
 
         - Node affinity or Node Selector
-          Not all nodes runs on same hardware and not all service need to run are cpu intensive or memory intensive.
-          Example - When we have a node that are suitable for CPU-intensive operations, we want to pair them with CPU-intensive services to maximize the efforts, to do that we can use nodeSelector, nodeAffinity
+        Not all nodes runs on same hardware and not all service need to run are cpu intensive or memory intensive.
+        
+        Example - When we have a node that are suitable for CPU-intensive operations, we want to pair them with CPU-intensive services to maximize the efforts, to do that we can use nodeSelector, nodeAffinity
           
           1. nodeSelector - We can specify the node labels directly
           2. nodeAffinity - A more expressive yet specific way to schedule the pods on a node
@@ -101,6 +102,19 @@ Lets segregate the problem into two parts:
           ```
 
         - Graceful shutdown of pods in k8s using lifecycle hooks
+        Pod are ephemeral in nature and may be killed due to a number of different reasons such as: 
+        1. Being scheduled on a node that fails (In this case the pod will be deleted )
+        2. Lack of resources on the node where the pods is scheduled (In this case the pod will be evicted )
+
+        Since pods fundamentally represent process running on nodes in a cluster, it is important to ensure that when killed, they have time to clean up and terminate gracefully. 
+        
+        By default K8s will wait for 30 sec to allow processes to handle the TERM signal. This is known as grace period. If the grace period time runs out and the process has not gracefully exited, the container runtime will send a KILL signal, abruptly stopping the process. This is useful when a processes needs additional time to clean up (making network call, write to disk etc.)
+        
+        K8s allows us to define lifecycle hooks for containers, important in the context of graceful shutdown is the preStop hook, that will be called when a container is terminated due to: 
+        1. An API request
+        2. Liveness/Readiness probe failure
+        3. Resource contention
+
     - Fault tolerance, scalability and high availability of the services deployed in K8
         - Auto scaling
         - Topology constraint
