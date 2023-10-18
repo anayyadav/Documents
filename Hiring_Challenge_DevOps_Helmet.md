@@ -12,8 +12,6 @@ Deliverables:
 ### Solution
 
 Lets segregate the problem into four parts:
-    
-1.	**Optimisation of the service deployed in K8s cluster**
 
 1. Performance enhancement
     - Build optimised docker image
