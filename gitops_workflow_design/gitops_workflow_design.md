@@ -119,8 +119,8 @@ Deliverables:
             project: Project-A
             source:
                 chart: backend-service
-                repoUrl: git@github.com:anayyadav/Documents.git/
-                targetRevision: 
+                repoUrl: git@github.com:anayyadav/Documents.git/helm_chart_and_deployment_strategy/backend-service-chart
+                targetRevision: HEAD
             helm: 
                 releaseName: Backend-service
             detination:
