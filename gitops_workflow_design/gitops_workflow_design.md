@@ -11,6 +11,7 @@ Deliverables:
     GitOps is a modern way to make better IaC for delivering apps/services in K8s. It is all about dterminism, idempotence, automation, observability and many other features.
 
     * How GitOps works
+        
         When we think about GitOps the first thing that comes in our head is that there is Git repository and in that repository we have YAML files describing the state of servies in K8s. For example deployments, services, ingress, secrets etc.
 
         On the other hand ther is a K8s cluster with all our resourecs forming our application/service.
@@ -25,8 +26,7 @@ Deliverables:
 
         One key ingredient to enable GitOps is to have the CI separate from CD. Once CI execution is done, the artifact will be push to the repository and ArgoCD will take care of the CD.
 
-        ![Alt text](image.png)
+        ![CICD With GitOps](image.png)
 
         As you can see in the above diagram, the GitOps operator lives within the clsuter and is using pull based deployment machanism.
 
-        
