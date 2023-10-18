@@ -194,12 +194,75 @@ Lets segregate the problem into two parts:
           
           ```
 
-
-
-
-
         - Topology constraint
+
+            Topology spread constraints uses labels to enforce specific distribution patterns. K8s uses labels to identify the topology of the nodes or zones and then define spread constraints to ensues that pods with certain labels get spread across those topologies.
+            
+            More the distribution lesser the disruption and therefore more fault tolerance
+
+            ```console
+            topologySpreadConstraints:
+            - maxSkew: 1
+              topologyKey: topology.kubernetes.io/zone
+              whenUnsatisfiable: DoNotSchedule
+              labelSelector:
+                  matchLabels:
+                  infra-env: prod
+                  infra-service: service-A
+            ```
+
         - Pod Anti-affinity
+
+          Pod affinity allows us to set priorities for which nodes to place our pods based on the attributes of the other pods running on those nodes. This works well for grouping pods togethers in the same node. Pod anti-affinity allows us to accomplish the opposite, ensuring certain pods don’t run on the same node as other pods. 
+          
+          We are going to use this to make sure our pods that run the same application are spread among multiple nodes. 
+          
+          > [!NOTE]
+          > This will also help us in making our service deployment to handle un-even disruption in an effective manner. 
+        
+          ```console
+            affinity:
+                nodeAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                    nodeSelectorTerms:
+                    - matchExpressions:
+                        - key: capacity-type
+                        operator: In
+                        values:
+                        - spot
+                    - matchExpressions:
+                        - key: capacity-type
+                        operator: In
+                        values:
+                        - on-demand
+                podAntiAffinity:
+                    requiredDuringSchedulingIgnoredDuringExecution:
+                    - labelSelector:
+                        matchLabels:
+                        app: service-A
+                        infra-env: prod
+                        infra-service: service-A
+                    topologyKey: kubernetes.io/hostname          
+          ```
         - Pod Disruption Budget
+          1. PDB ensures that a minimum number of replicas are available at all times, which helps maintain the high availability of critical workloads during node maintenance or failures.
+          2. This also automate the management of disruptions to workloads during node maintenance or failures, reducing the need for manual intervention
+          3. By preventing too many replicas from being disrupted simultaneously, PDBs can help improve the stability of our applications
+          4. By ensuring the high availability of critical workloads, PDBs can help reduce downtime and data loss, which can be costly to business.
+
+          ```console
+            apiVersion: policy/v1
+            kind: PodDisruptionBudget
+            metadata:
+                name: service-A
+                namespace: namespace-A
+            spec:
+                maxUnavailable: 1
+                selector:
+                    matchLabels:
+                    app: service-A
+
+          ```
+
         - Pod priority and Pre-emption
     - Cost optimisation at service deployment level
