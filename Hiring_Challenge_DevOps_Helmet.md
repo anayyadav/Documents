@@ -122,6 +122,7 @@ Lets segregate the problem into two parts:
           ```console
             ## for entire pod
             terminationGracePeriodSeconds: 60
+
             ## for application container 
             lifecycle:
               preStop:
@@ -134,6 +135,69 @@ Lets segregate the problem into two parts:
 
     - Fault tolerance, scalability and high availability of the services deployed in K8
         - Auto scaling
+
+          We need to have auto-scaling in place to make our services more fault tolerant. There are two types of auto scaling.
+          1. Vertical Scaling (scale up )
+            - Vertical scaling has hard limit, it is impossible to add unlimited CPU and memory to a single server
+            - It does not have failover and redundancy. If one pods goes down, the services goes down with it completely.
+          2. Horizontal scaling (scale out)
+            - It is more desirable for large scale application due to limitation of vertical scaling. 
+
+          ```console
+            apiVersion: autoscaling/v2
+            kind: HorizontalPodAutoscaler
+            metadata:
+            name: service-A
+            namespace: namespace-A
+            labels:
+                infra-env: prod
+                infra-product: payments
+                infra-service: service-A
+            spec:
+            scaleTargetRef:
+                kind: Deployment
+                name: service-A
+                apiVersion: apps/v1
+            minReplicas: 2
+            maxReplicas: 75
+            metrics:
+                - type: Resource
+                resource:
+                    name: memory
+                    target:
+                    type: Utilization
+                    averageUtilization: 90
+                - type: Resource
+                resource:
+                    name: cpu
+                    target:
+                    type: Utilization
+                    averageUtilization: 70
+            behavior:
+                scaleUp:
+                stabilizationWindowSeconds: 0
+                selectPolicy: Max
+                policies:
+                    - type: Pods
+                    value: 5
+                    periodSeconds: 10
+                    - type: Percent
+                    value: 50
+                    periodSeconds: 10
+                scaleDown:
+                stabilizationWindowSeconds: 60
+                selectPolicy: Max
+                policies:
+                    - type: Pods
+                    value: 1
+                    periodSeconds: 300
+          
+          ```
+
+
+
+
+
         - Topology constraint
         - Pod Anti-affinity
         - Pod Disruption Budget
