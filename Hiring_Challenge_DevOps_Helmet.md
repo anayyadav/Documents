@@ -30,7 +30,7 @@ Lets segregate the problem into two parts:
           3. Liveness probe – It confirms whether the container is running. If the signal form the probe indicates a non running status, the kubelet picks up this signal and kills the container process. 
         > [!NOTE]
         > K8s probe do more than help us understand our application health. They also supports well-planned effective autoscaling based on health metrics
-        <sup>
+        ```console
         livenessProbe:
           failureThreshold: 6
           httpGet:
@@ -49,7 +49,8 @@ Lets segregate the problem into two parts:
           periodSeconds: 10
           successThreshold: 1
           timeoutSeconds: 30        
-        </sup>
+        ```
+        
         - Resource constraints
         - Node affinity or Node Selector
         - Graceful shutdown of pods in k8s using lifecycle hooks
