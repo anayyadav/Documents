@@ -12,11 +12,11 @@ Deliverables:
 ### Solution
 
 Lets segregate the problem into two parts:
-1.	** K8s cluster optimisation **
+1.	**K8s cluster optimisation**
     - Performance enhancement    
     - Fault tolerance and scalability of the cluster
     - Cost optimisation
-2.	** Optimisation of the service deployed in K8s cluster **
+2.	**Optimisation of the service deployed in K8s cluster**
     - Performance enhancement
         - Build optimised docker image
           1. Have small images, since big images are not so portable over the network
@@ -30,7 +30,26 @@ Lets segregate the problem into two parts:
           3. Liveness probe – It confirms whether the container is running. If the signal form the probe indicates a non running status, the kubelet picks up this signal and kills the container process. 
         > [!NOTE]
         > K8s probe do more than help us understand our application health. They also supports well-planned effective autoscaling based on health metrics
-
+        <sup>
+        livenessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /health
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30
+        readinessProbe:
+          failureThreshold: 6
+          httpGet:
+            path: /health
+            port: http
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 30        
+        </sup>
         - Resource constraints
         - Node affinity or Node Selector
         - Graceful shutdown of pods in k8s using lifecycle hooks
