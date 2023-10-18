@@ -22,7 +22,15 @@ Lets segregate the problem into two parts:
           1. Have small images, since big images are not so portable over the network
           2. Use container friendly OS like alpine so that they are more resistant to misconfiguration
           3. Use multi stage builds so that we deploy only the compiled application and not the dev sources that comes with it.
+
         - Diagnostic checks
+        The K8s probes allows us to validate the state of the pods running in our k8s cluster.  Additionally we can use K8s probe to monitor and gather information about the other events affecting the containers, such as autoscaling.
+          1. Start-up probe - This is first to start and tells Kubelet that the application within the container has successfully started. The other probes will be disabled until this probe is in a successful state.
+          2. Readiness probe  - This informs K8s that the container is ready to accept the requests. If this probe is in a failed state no traffic is allocated to the pod and the pod is removed from the corresponding service.
+          3. Liveness probe – It confirms whether the container is running. If the signal form the probe indicates a non running status, the kubelet picks up this signal and kills the container process. 
+          
+        K8s probe do more than help us understand our application health. They also supports well-planned, effective autoscaling based on health metrics
+        
         - Resource constraints
         - Node affinity or Node Selector
         - Graceful shutdown of pods in k8s using lifecycle hooks
