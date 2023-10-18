@@ -28,8 +28,8 @@ Lets segregate the problem into two parts:
           1. Start-up probe - This is first to start and tells Kubelet that the application within the container has successfully started. The other probes will be disabled until this probe is in a successful state.
           2. Readiness probe  - This informs K8s that the container is ready to accept the requests. If this probe is in a failed state no traffic is allocated to the pod and the pod is removed from the corresponding service.
           3. Liveness probe – It confirms whether the container is running. If the signal form the probe indicates a non running status, the kubelet picks up this signal and kills the container process. 
-        [!NOTE]
-        K8s probe do more than help us understand our application health. They also supports well-planned, effective autoscaling based on health metrics
+        > [!NOTE]
+        > K8s probe do more than help us understand our application health. They also supports well-planned effective autoscaling based on health metrics
 
         - Resource constraints
         - Node affinity or Node Selector
