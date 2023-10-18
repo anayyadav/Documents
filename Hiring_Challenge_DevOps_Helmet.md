@@ -19,6 +19,9 @@ Lets segregate the problem into two parts:
 2.	Optimisation of the service deployed in K8s cluster
     - Performance enhancement
         - Build optimised docker image
+          1. Have small images, since big images are not so portable over the network
+          2. Use container friendly OS like alpine so that they are more resistant to misconfiguration
+          3. Use multi stage builds so that we deploy only the compiled application and not the dev sources that comes with it.
         - Diagnostic checks
         - Resource constraints
         - Node affinity or Node Selector
