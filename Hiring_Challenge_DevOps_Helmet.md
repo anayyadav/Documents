@@ -53,6 +53,7 @@ Lets segregate the problem into two parts:
           ```
 
         - Resource constraints
+
           K8s orchestrate containers at scale and the heart of the mechanism is the efficient scheduling of pods into nodes. We can do that by specifying resources constraints.
           1. We can define the resource constraints by setting up request and limit
           2. Request and limits are enforced based on whether the resource is compressible or incompressible
@@ -76,6 +77,7 @@ Lets segregate the problem into two parts:
           ```
 
         - Node affinity or Node Selector
+
           Not all nodes runs on same hardware and not all service need to run are cpu intensive or memory intensive.
         
           Example - When we have a node that are suitable for CPU-intensive operations, we want to pair them with CPU-intensive services to maximize the efforts, to do that we can use nodeSelector, nodeAffinity
@@ -103,6 +105,7 @@ Lets segregate the problem into two parts:
           ```
 
         - Graceful shutdown of pods in k8s using lifecycle hooks
+        
           Pod are ephemeral in nature and may be killed due to a number of different reasons such as: 
           1. Being scheduled on a node that fails (In this case the pod will be deleted )
           2. Lack of resources on the node where the pods is scheduled (In this case the pod will be evicted )
